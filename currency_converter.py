@@ -1,3 +1,4 @@
+from unittest import case
 from requests import get
 from pprint import PrettyPrinter
 
@@ -25,7 +26,18 @@ def print_currencies(currencies):
         print(f"{_id} - {name} - {symbol}")
 
 
+def exchange_rate(currency1, currency2):
+    endpoint = f"api/v7/convert?q={currency1}_{currency2}&compact=ultra&apiKey={API_KEY}" #ultracompact : 
+    url = BASE_URL + endpoint
 
+    response = get(url)
+    data = response.json()
+    if len(data) == 0:
+        print('Invalid currencies ...')
+        return
+    
+    rate = list(data.values())[0]
+    print(f"{currency1} -> {currency2} = {rate}")
+    
+    return rate
 
-data = get_currencies()
-print_currencies(data)
